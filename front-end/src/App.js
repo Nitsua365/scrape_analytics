@@ -5,7 +5,7 @@ import './App.css';
 import io from 'socket.io-client';
 import { LineChart, Line, XAxis, YAxis } from 'recharts'
 
-const socket = io('ws://67.198.83.234:5516', {
+const socket = io(`${process.env.CONNECT_STRING}`, {
   transports: ['websocket', 'polling']
 })
 
@@ -27,11 +27,11 @@ function App() {
       setCpuUsage(curr => [...curr, cpuData])
     })
 
-    return () => {
+    // return () => {
       // socket.off('connect');
       // socket.off('disconnect');
-      socket.off('CPUPercent');
-    };
+      // socket.off('CPUPercent');
+    // };
   }, []);
 
   return (

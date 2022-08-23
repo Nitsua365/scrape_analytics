@@ -1,6 +1,7 @@
 const io = require('socket.io-client')
+const env = require('dotenv')
 
-const socket = io('ws://67.198.83.234:5516', {
+const socket = io(`${process.env.CONNECT_STRING}`, {
     transports: ['websocket', 'polling']
 })
 

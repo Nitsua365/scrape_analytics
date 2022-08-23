@@ -13,7 +13,7 @@ io.on('connection', (socket) => {
     }, 3000)
 });
 
-httpServer.listen(5516)
+httpServer.listen(process.env.PORT)
 
 httpServer.on('error', (e) => {
     console.error('server err:', e)
