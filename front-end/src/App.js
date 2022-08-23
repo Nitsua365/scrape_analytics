@@ -5,8 +5,6 @@ import './App.css';
 import io from 'socket.io-client';
 import { LineChart, Line, XAxis, YAxis, Label } from 'recharts'
 
-console.log(process.env.REACT_APP_CONNECT_STRING)
-
 const socket = io(`${process.env.REACT_APP_CONNECT_STRING}`, {
   transports: ['websocket', 'polling']
 })
