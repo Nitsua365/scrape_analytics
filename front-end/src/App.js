@@ -5,7 +5,7 @@ import './App.css';
 import io from 'socket.io-client';
 import { LineChart, Line, XAxis, YAxis } from 'recharts'
 
-const socket = io('ws://localhost:5516', {
+const socket = io('ws://67.198.83.234:5516', {
   transports: ['websocket', 'polling']
 })
 
