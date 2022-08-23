@@ -1,6 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 ## FRONT END
+front-end/package-lock.json
+front-end/yarn.lock
 
 # dependencies
 front-end/node_modules/
@@ -30,3 +32,4 @@ yarn-error.log*
 ## BACKEND
 back-end/node_modules/
 back-end/.env
+back-end/package-lock.json

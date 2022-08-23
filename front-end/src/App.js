@@ -24,7 +24,7 @@ function App() {
 
     socket.on('CPUPercent', (cpuData) => {
       console.log(cpuData)
-      setCpuUsage(cpu => [...cpu, cpuData])
+      setCpuUsage(curr => [...curr, cpuData])
     })
 
     return () => {
@@ -40,8 +40,8 @@ function App() {
       height={300} 
       data={cpuUsage} 
     >
-      <XAxis />
-      <YAxis key="cpu" />
+      <XAxis range={[0, 1]} key='percent' />
+      <YAxis key='time' />
       <Line type="monotone" dataKey="uv" stroke="#8884d8" />
       <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
     </ LineChart>
