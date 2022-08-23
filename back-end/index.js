@@ -1,5 +1,8 @@
 const httpServer = require("http").createServer();
 const { Server } = require("socket.io");
+const cpu = require('cpu-percent')
+
+require('dotenv').config();
 
 const io = new Server(httpServer, {
     transports: ['websocket', 'polling']
@@ -13,7 +16,7 @@ io.on('connection', (socket) => {
     }, 3000)
 });
 
-httpServer.listen(process.env.PORT)
+httpServer.listen(process.env.PORT, () => console.log(`listening on ${process.env.PORT}`))
 
 httpServer.on('error', (e) => {
     console.error('server err:', e)
