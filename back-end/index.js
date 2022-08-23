@@ -10,9 +10,9 @@ const io = new Server(httpServer, {
 
 io.on('connection', (socket) => {
     cpu((error, percent) => {
-        console.log('per', percent)
+        // console.log('per', percent)
         if (error) console.error('error', error)
-        else socket.emit('CPUPercent', { percent, time: Date.now() })
+        else socket.emit('CPUPercent', { percent, time: new Date(Date.now()).toLocaleTimeString('en-US', { hour12: false }) })
     }, 3000)
 });
 
