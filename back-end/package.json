@@ -1,0 +1,18 @@
+{
+  "name": "websocketserver",
+  "version": "1.0.0",
+  "description": "Socket server for analytics front end",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Austin Blanchard",
+  "license": "ISC",
+  "dependencies": {
+    "cpu-percent": "^2.0.1",
+    "cpu-stats": "^1.0.0",
+    "socket.io": "^4.5.1",
+    "socket.io-client": "^4.5.1"
+  }
+}
