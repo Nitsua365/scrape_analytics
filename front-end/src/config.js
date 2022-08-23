@@ -1,0 +1,1 @@
+export const WEBSOCKET_STRING = process.env.CONNECT_STRING;

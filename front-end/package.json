@@ -70,6 +70,7 @@
   "devDependencies": {
     "concurrently": "^7.3.0",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.0.1",
     "electron": "^6.1.12",
     "electron-builder": "^5.5.0",
     "electronmon": "^2.0.2",

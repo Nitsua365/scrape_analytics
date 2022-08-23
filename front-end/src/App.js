@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 import io from 'socket.io-client';
-import { LineChart, Line, XAxis, YAxis } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, Label } from 'recharts'
 
-const socket = io(`${process.env.CONNECT_STRING}`, {
+console.log(process.env.REACT_APP_CONNECT_STRING)
+
+const socket = io(`${process.env.REACT_APP_CONNECT_STRING}`, {
   transports: ['websocket', 'polling']
 })
 
@@ -27,23 +29,24 @@ function App() {
       setCpuUsage(curr => [...curr, cpuData])
     })
 
-    // return () => {
+    return () => {
       // socket.off('connect');
       // socket.off('disconnect');
-      // socket.off('CPUPercent');
-    // };
+      socket.off('CPUPercent');
+    };
   }, []);
 
   return (
     <LineChart
-      width={500} 
+      width={700} 
       height={300} 
       data={cpuUsage} 
     >
-      <XAxis range={[0, 1]} key='percent' />
-      <YAxis key='time' />
-      <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-      <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
+      <XAxis dataKey='time'>
+        <Label value="Time" position="insideBottom" offset={-4} />
+      </XAxis>
+      <YAxis dataKey='percent' label={{ value: 'CPU Percent %', angle: -90, position: 'insideLeft' }} />
+      <Line type="monotone" dataKey="percent" stroke="#8884d8" />
     </ LineChart>
   );
 }
