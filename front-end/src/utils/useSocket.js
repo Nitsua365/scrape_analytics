@@ -17,7 +17,7 @@ const useSocket = (socket, key) => {
         };
     }, []);
 
-    return { isConnected, data }
+    return { isConnected, data, mostRecentResult: data[data.length - 1] }
 }
 
 export default useSocket;

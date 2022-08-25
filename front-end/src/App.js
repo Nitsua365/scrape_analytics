@@ -3,6 +3,7 @@ import React from 'react';
 import './App.css';
 
 import io from 'socket.io-client';
+
 import { 
   LineChart, 
   Line, 
@@ -10,6 +11,8 @@ import {
   YAxis, 
   Label
 } from 'recharts'
+
+import { LinearProgress } from '@mui/material'
 
 import useSocket from './utils/useSocket';
 
@@ -19,7 +22,7 @@ const socket = io(`${process.env.REACT_APP_CONNECT_STRING}`, {
 
 function App() {
 
-  const { isConnected, data } = useSocket(socket, 'CPUPercent');
+  const { isConnected, data, mostRecentResult } = useSocket(socket, 'CPUPercent');
 
   return ( data.length &&
     <>
@@ -47,6 +50,9 @@ function App() {
           )}
 
         </ LineChart>
+      </div>
+      <div style={{ marginTop: '16px', marginBottom: '16px', width: '50%' }}>
+       <LinearProgress variant="buffer" value={mostRecentResult.batteryLvl} />
       </div>
       {(data.length) && <div>System Uptime: {data[data.length - 1].uptime}</div>}
     </>
