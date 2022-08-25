@@ -8,7 +8,7 @@ const useSocket = (socket, key) => {
     useEffect(() => {
         socket.on('connect', () => setIsConnected(true))
         socket.on('disconnect', () => setIsConnected(false));
-        socket.on(key, (cpuData) => setData(curr => [...curr, cpuData]))
+        socket.on(key, (data) => setData(curr => [...curr, data]))
     
         return () => {
           socket.off('connect');
@@ -17,7 +17,7 @@ const useSocket = (socket, key) => {
         };
     }, []);
 
-    return { isConnected, data, mostRecentResult: data[data.length - 1] }
+    return { isConnected, data, mostRecentResult: data[data.length - 1], hasData: data.length > 0 }
 }
 
 export default useSocket;
