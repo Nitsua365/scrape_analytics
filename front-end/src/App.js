@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import './App.css';
 
@@ -11,6 +11,7 @@ import {
   Label
 } from 'recharts'
 
+import useSocket from './utils/useSocket';
 
 const socket = io(`${process.env.REACT_APP_CONNECT_STRING}`, {
   transports: ['websocket', 'polling']
@@ -18,28 +19,15 @@ const socket = io(`${process.env.REACT_APP_CONNECT_STRING}`, {
 
 function App() {
 
-  const [cpuUsage, setCpuUsage] = useState([]);
-  const [isConnected, setIsConnected] = useState(false)
+  const { isConnected, data } = useSocket(socket, 'CPUPercent');
 
-  useEffect(() => {
-    socket.on('connect', () => setIsConnected(true))
-    socket.on('disconnect', () => setIsConnected(false));
-    socket.on('CPUPercent', (cpuData) => setCpuUsage(curr => [...curr, cpuData]))
-
-    return () => {
-      socket.off('connect');
-      socket.off('disconnect');
-      socket.off('CPUPercent');
-    };
-  }, []);
-
-  return ( cpuUsage.length &&
+  return ( data.length &&
     <>
       <div>
         <LineChart
           width={700} 
           height={300} 
-          data={cpuUsage}
+          data={data}
         >
           {(isConnected) ? 
           (
@@ -60,7 +48,7 @@ function App() {
 
         </ LineChart>
       </div>
-      {(cpuUsage.length) && <div>System Uptime: {cpuUsage[cpuUsage.length - 1].uptime}</div>}
+      {(data.length) && <div>System Uptime: {data[data.length - 1].uptime}</div>}
     </>
   );
 }
