@@ -11,7 +11,7 @@ import {
   Label
 } from 'recharts'
 
-import useSocket from 'src/utils/useSocket';
+import useSocket from './utils/useSocket';
 
 const socket = io(`${process.env.REACT_APP_CONNECT_STRING}`, {
   transports: ['websocket', 'polling']
