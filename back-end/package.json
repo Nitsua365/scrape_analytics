@@ -4,16 +4,22 @@
   "description": "Backend for websocket server",
   "main": "index.js",
   "dependencies": {
+    "battery-level": "^3.0.0",
     "cors": "^2.8.5",
     "cpu-percent": "^2.0.1",
     "cpu-stats": "^1.0.0",
     "dotenv": "^16.0.1",
-    "socket.io": "^4.5.1"
+    "socket.io": "^4.5.1",
+    "socket.io-client": "^4.5.1",
+    "sudo-js": "^1.0.2"
   },
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Austin Blanchard",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
 }
