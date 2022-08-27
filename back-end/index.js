@@ -45,8 +45,8 @@ io.on('connection', (socket) => {
     }
 
     // send the initial polling data on connection
-    UPS_Analytics();
     cpu(CPU_Analytics)();
+    UPS_Analytics();
 
     // CPU analytics
     cpu(CPU_Analytics, 3000)
