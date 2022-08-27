@@ -2,8 +2,6 @@ import React from 'react';
 
 import './App.css';
 
-import io from 'socket.io-client';
-
 import { 
   LineChart, 
   Line, 
@@ -12,21 +10,17 @@ import {
   Label
 } from 'recharts'
 
-import { Box, LinearProgress } from '@mui/material'
-
 import useSocket from './utils/useSocket';
-
-const socket = io(`${process.env.REACT_APP_CONNECT_STRING}`, {
-  transports: ['websocket', 'polling']
-})
+import Toolbar from './Toolbar';
 
 function App() {
 
-  const CPUData = useSocket(socket, 'CPU');
-  const batteryData = useSocket(socket, 'UPS')
+  const batteryData = useSocket('UPS')
+  const CPUData = useSocket('CPU');
 
   return ( CPUData.hasData &&
     <>
+      <Toolbar data={batteryData} />
       <div>
         <LineChart
           width={700} 
@@ -52,22 +46,6 @@ function App() {
 
         </ LineChart>
       </div>
-      {batteryData.hasData && (
-      <div style={{ marginLeft: '16px', marginTop: '16px', marginBottom: '16px' }}>
-        <Box>
-          <LinearProgress color='success' sx={{ maxWidth: 100 }} variant='determinate' value={batteryData.mostRecentResult.batteryLvl} />
-        </Box>
-        <div>
-          Battery: {batteryData.mostRecentResult.batteryLvl} %
-        </div>
-        <div>
-          Load(W): {batteryData.mostRecentResult.load.wattage}
-        </div>
-        <div>
-          Load(%): {batteryData.mostRecentResult.load.percent} %
-        </div>
-      </div>)}
-      {(CPUData.hasData) && <div>System Uptime: {CPUData.mostRecentResult.uptime}</div>}
     </>
   );
 }
