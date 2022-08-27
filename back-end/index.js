@@ -1,7 +1,6 @@
 const httpServer = require("http").createServer()
 const { Server } = require("socket.io");
-const cpu = require('cpu-percent')
-const os = require('os')
+const sysInfo = require('systeminformation');
 const { exec } = require('node:child_process');
 var sudo = require('sudo-js');
 
@@ -18,6 +17,31 @@ const BATTERY_REGEX = /[0-9]+ %/g
 
 io.on('connection', (socket) => {
 
+    let Time_data = { 
+        time: "*"
+    }
+
+    let CPU_data = {
+        cpuCurrentSpeed: "*",
+        cpuTemperature: 'main, cores, max'
+    }
+
+    let RAM_data = {
+        mem: 'total, free, used, active, available, swaptotal, swapused, swapfree'
+    }
+
+    let Network_data = {
+        networkStats: "*"
+    }
+
+    let Process_data = {
+        processLoad: '(scrapy) *'
+    }
+
+    let Storage_data = {
+        disksIO: '*'
+    }
+
     const UPS_Analytics = () => {
         sudo.exec(['sudo', 'pwrstat', '-status'], (err, pid, output) => {
             if (err) console.error('UPS pwrstat error:', err, 'pid:', pid)
@@ -31,28 +55,28 @@ io.on('connection', (socket) => {
             })
         })
     }
-    
-    const CPU_Analytics = (error, percent) => {
-        // console.log('per', percent)
-        if (error) console.error('cpu error', error)
-        else {
-            socket.emit('CPU', { 
-                cpu : { percent },
-                uptime: os.uptime(),
-                time: new Date(Date.now()).toLocaleTimeString('en-US', { hour12: false }),
-            })
-        }
-    }
 
-    // send the initial polling data on connection
-    cpu(CPU_Analytics)();
-    UPS_Analytics();
+    // Time analytics
+    sysInfo.observe(Time_data, 3000, (data) => socket.emit("Time", data));
 
     // CPU analytics
-    cpu(CPU_Analytics, 3000)
+    sysInfo.observe(CPU_data, 3000, (data) => socket.emit("CPU", data));
 
-    // UPS analytics
-    setInterval(UPS_Analytics, 30000)
+    // Memory/RAM analytics
+    sysInfo.observe(RAM_data, 3000, (data) => socket.emit("Mem", data));
+
+    // Network analytics
+    sysInfo.observe(Network_data, 3000, (data) => socket.emit("Net", data));
+
+    // Process usage anlytics
+    sysInfo.observe(Process_data, 3000, (data) => socket.emit("Proc", data));
+
+    // Disk usage analytics
+    sysInfo.observe(Storage_data, 3000, (data) => socket.emit("Storage", data))
+
+    // UPS battery analytics
+    UPS_Analytics();
+    setInterval(UPS_Analytics, 10000)
 });
 
 httpServer.listen(process.env.PORT, () => console.log(`listening on ${process.env.PORT}`))
