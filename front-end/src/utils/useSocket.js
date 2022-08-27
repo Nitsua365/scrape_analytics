@@ -2,17 +2,17 @@ import { useState, useEffect } from 'react'
 
 import { useAppContext } from '../context/AppContext';
 
-const useSocket = (key) => {
+const useSocket = ({ key, trackHistory=true }) => {
 
   const { socket } = useAppContext();
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState((trackHistory) ? [] : {});
   const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {
     socket.on('connect', () => setIsConnected(true))
     socket.on('disconnect', () => setIsConnected(false));
-    socket.on(key, (data) => setData(curr => [...curr, data]))
+    socket.on(key, (data) => setData(curr => ((trackHistory) ? [...curr, data] : data)))
 
     return () => {
       socket.off('connect');
@@ -21,7 +21,11 @@ const useSocket = (key) => {
     };
   }, []);
 
-  return { isConnected, data, mostRecentResult: data[data.length - 1], hasData: data.length > 0 }
+  return { isConnected, 
+          data, 
+          mostRecentResult: (trackHistory) ? data[data.length - 1] : data, 
+          hasData: (trackHistory) ? data.length > 0 : Object.keys(data).length
+        }
 }
 
 export default useSocket;
