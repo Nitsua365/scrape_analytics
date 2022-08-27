@@ -18,6 +18,8 @@ const BATTERY_REGEX = /[0-9]+ %/g
 
 io.on('connection', (socket) => {
 
+    console.log('connected')
+
     const sys_data = {
         time: "*",
         cpuCurrentSpeed: "*",
@@ -67,7 +69,7 @@ io.on('connection', (socket) => {
         })
     }
 
-    cpuPercent((err, percent) => {
+    const closePing = cpuPercent((err, percent) => {
         if (err) console.error('CPU error:', err)
 
         sysInfo.get(sys_data, (data) => {
@@ -94,11 +96,17 @@ io.on('connection', (socket) => {
         // // Disk usage analytics
         // sysInfo.get(Storage_data, (data) => socket.emit("Storage", data));
 
-    }, 3000)
+    }, 3000);
+
 
     // UPS battery analytics
-    UPS_Analytics();
-    setInterval(UPS_Analytics, 10000)
+    let closeUPSPing = setInterval(UPS_Analytics, 10000)
+
+    socket.on("disconnect", (reason) => {
+        clearInterval(closeUPSPing)
+        closePing()
+        console.log('disconnecting', reason);
+    });
 });
 
 httpServer.listen(process.env.PORT, () => console.log(`listening on ${process.env.PORT}`))
