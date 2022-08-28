@@ -12,8 +12,9 @@ import {
 } from 'recharts'
 
 import useSocket from './utils/useSocket';
-import { AppBar, Grid } from '@mui/material';
+import { AppBar, Grid, Toolbar, Box } from '@mui/material';
 import BatteryStatus from './BatteryStatus';
+import UPSStatus from './UPSStatus';
 
 function App() {
 
@@ -21,12 +22,21 @@ function App() {
 
   return (sysData.hasData &&
     <>
-      <AppBar position='static' color='info' sx={{ marginBottom: '10px' }}>
-        <BatteryStatus />
-      </AppBar>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position='static' color='info' sx={{ marginBottom: '10px' }}>
+          <Toolbar>
+            <div>
+              <BatteryStatus />
+            </div>
+            <div>
+              {/* <UPSStatus /> */}
+            </div>
+          </Toolbar>
+        </AppBar>
+      </Box>
       <div>
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 8, sm: 8, md: 8 }}>
-          <Grid item xs={5}>
+        <Grid container rowSpacing={8} columnSpacing={4}>
+          <Grid item xs={6}>
             <LineChart
               width={700} 
               height={300} 
@@ -50,7 +60,7 @@ function App() {
               )}
             </ LineChart>
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={6}>
             <LineChart
               width={700}
               height={300}
@@ -68,7 +78,7 @@ function App() {
               <Line type="monotone" name="Core 4" dataKey="cpuTemperature.cores[3]" stroke="#fff714" animationDuration={400} />
             </LineChart>
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={6}>
             <LineChart
               width={700}
               height={300}
@@ -88,6 +98,23 @@ function App() {
               <Line type="monotone" name="Core 6" dataKey="cpuCurrentSpeed.cores[5]" stroke="#36daf0" animationDuration={400} />
               <Line type="monotone" name="Core 7" dataKey="cpuCurrentSpeed.cores[6]" stroke="#964B00" animationDuration={400} />
               <Line type="monotone" name="Core 8" dataKey="cpuCurrentSpeed.cores[7]" stroke="#d210d3" animationDuration={400} />
+            </LineChart>
+          </Grid>
+          <Grid item xs={5}>
+            <LineChart
+              width={700}
+              height={300}
+              data={sysData.data}
+            >
+              <XAxis dataKey='time'>
+                <Label value="Time" position="bottom" offset={-10} />
+              </XAxis>
+              <YAxis offset={-10} label={{ value: 'Memory (MB)', angle: -90, position: 'centerLeft' }} />
+              <Legend verticalAlign="top" />
+              <Line type="monotone" name="Available" dataKey="mem.available" stroke="#006eff" animationDuration={400} />
+              <Line type="monotone" name="Free" dataKey="mem.free" stroke="#ff0000" animationDuration={400} />
+              <Line type="monotone" name="Active" dataKey="mem.active" stroke="#00ff00" animationDuration={400} />
+              <Line type="monotone" name="Used" dataKey="mem.used" stroke="#ffa500" animationDuration={400} />
             </LineChart>
           </Grid>
         </Grid>

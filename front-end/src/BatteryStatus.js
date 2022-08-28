@@ -12,12 +12,16 @@ function BatteryStatus() {
     <>
       {data.hasData ? (
         <div style={{ paddingBottom: '5px', paddingTop: '5px', paddingLeft: '5px' }}>
-          <Box>
-            <LinearProgress color='success' sx={{ maxWidth: 100, height: '10px' }} variant='determinate' value={data.mostRecentResult.batteryLvl} />
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ width: '100px', mr: 1 }}>
+              <LinearProgress color='success' variant='determinate' value={data.mostRecentResult.batteryLvl} sx={{ height : '10px' }} /> 
+            </Box>
+            <Box sx={{ minWidth: 20 }}>
+              <div>
+                {`${data.mostRecentResult.batteryLvl} %`}
+              </div>
+            </Box>
           </Box>
-          <div>
-            Battery: {data.mostRecentResult.batteryLvl} %
-          </div>
           <div>
             Load(W): {data.mostRecentResult.load.wattage}
           </div>
