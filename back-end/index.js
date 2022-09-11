@@ -69,12 +69,21 @@ io.on('connection', (socket) => {
         })
     }
 
+    const convertToMB = (mem) => {
+        mem.available = mem.available / 1000000.0
+        mem.free = mem.free / 1000000.0
+        mem.active = mem.active / 1000000.0
+        mem.used = mem.used / 1000000.0
+        return mem
+    }
+
     const closePing = cpuPercent((err, percent) => {
         if (err) console.error('CPU error:', err)
 
         sysInfo.get(sys_data, (data) => {
             data.cpuCurrentSpeed.percent = percent;
             data.time = new Date(Date.now()).toLocaleTimeString('en-US', { hour12: false });
+            data.mem = convertToMB({ ...data.mem })
             socket.emit("Sys", data)
         })
 
