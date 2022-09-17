@@ -12,25 +12,37 @@ import {
 } from 'recharts'
 
 import useSocket from './utils/useSocket';
-import { AppBar, Grid, Toolbar, Box } from '@mui/material';
+import { AppBar, Grid, Toolbar, Box, IconButton, styled, Typography } from '@mui/material';
+import MenuIcon from '@mui/material/Menu'
 import BatteryStatus from './BatteryStatus';
-import UPSStatus from './UPSStatus';
 
 function App() {
 
-  const sysData = useSocket({ key: 'Sys', trackHistory : true });
+  const sysData = useSocket({ key: 'Sys', trackHistory : true, points: 100 });
 
   return (sysData.hasData &&
     <>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position='static' color='info' sx={{ marginBottom: '10px' }}>
+        <AppBar position='static' color='info' sx={{ marginBottom: '20px' }}>
           <Toolbar>
-            <div>
+            <Box 
+              size="large"
+              edge="end"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >
               <BatteryStatus />
-            </div>
-            <div>
-              {/* <UPSStatus /> */}
-            </div>
+            </Box>
+            
+            {/* <IconButton
+              size="large"
+              aria-label="display more actions"
+              edge="end" 
+              color='inherit'
+            > */}
+              <MenuIcon />
+            {/* </IconButton> */}
           </Toolbar>
         </AppBar>
       </Box>

@@ -4,7 +4,7 @@
   "private": true,
   "author": "Austin Blanchard",
   "description": "Analytics app for my Ubuntu Server",
-  "homepage": "./",
+  "homepage": "./src/index.js",
   "main": "./public/electron.js",
   "dependencies": {
     "@emotion/react": "^11.10.0",
@@ -75,7 +75,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",
     "electron": "^6.1.12",
-    "electron-builder": "^5.5.0",
+    "electron-builder": "^23.3.3",
     "electronmon": "^2.0.2",
     "wait-on": "^6.0.1"
   }

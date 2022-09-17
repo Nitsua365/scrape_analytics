@@ -10,7 +10,10 @@ const socket = io(`${process.env.REACT_APP_CONNECT_STRING}`, {
 
 export function AppPageContext({ children }) {
 
-  let StateInit = { socket }
+  let StateInit = { 
+    socket, 
+    numberOfPoints: 50 
+  }
 
   const [state, setState] = useState(StateInit)
   const setStateVar = (field, value) => setState({ ...state, [field]: value })

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 import { useAppContext } from '../context/AppContext';
 
-const useSocket = ({ key, trackHistory=true }) => {
+const useSocket = ({ key, trackHistory=true, points=1 }) => {
 
   const { socket } = useAppContext();
 
