@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useState } from "react";
 
-import io from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 
 const AppContext = createContext({});
 
-const socket = io(`${process.env.REACT_APP_CONNECT_STRING}`, {
+const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(`${process.env.REACT_APP_CONNECT_STRING}`, {
     transports: ['websocket', 'polling']
 });
 

@@ -12,11 +12,11 @@ import {
 } from 'recharts'
 
 import useSocket from './utils/useSocket';
-import { AppBar, Grid, Toolbar, Box, IconButton, styled, Typography } from '@mui/material';
+import { AppBar, Grid, Toolbar, Box } from '@mui/material';
 import MenuIcon from '@mui/material/Menu'
 import BatteryStatus from './BatteryStatus';
 
-function App() {
+const App: React.FC = () => {
 
   const sysData = useSocket({ key: 'Sys', trackHistory : true, points: 100 });
 
@@ -47,7 +47,7 @@ function App() {
         </AppBar>
       </Box>
       <div>
-        <Grid container rowSpacing={8} columnSpacing={4}>
+        <Grid container rowSpacing={8} columnSpacing={4} flexShrink={5}>
           <Grid item xs={6}>
             <LineChart
               width={700} 
@@ -72,7 +72,7 @@ function App() {
               )}
             </ LineChart>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} flexShrink={5}>
             <LineChart
               width={700}
               height={300}
@@ -90,7 +90,7 @@ function App() {
               <Line type="monotone" name="Core 4" dataKey="cpuTemperature.cores[3]" stroke="#fff714" animationDuration={400} />
             </LineChart>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} flexShrink={5}>
             <LineChart
               width={700}
               height={300}
@@ -112,7 +112,7 @@ function App() {
               <Line type="monotone" name="Core 8" dataKey="cpuCurrentSpeed.cores[7]" stroke="#d210d3" animationDuration={400} />
             </LineChart>
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={5} flexShrink={5}>
             <LineChart
               width={700}
               height={300}

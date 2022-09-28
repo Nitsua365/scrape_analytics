@@ -21,7 +21,8 @@ const useSocket = ({ key, trackHistory=true, points=1 }) => {
     };
   }, []);
 
-  return { isConnected, 
+  return { 
+          isConnected, 
           data, 
           mostRecentResult: (trackHistory) ? data[data.length - 1] : data, 
           hasData: (trackHistory) ? data.length > 0 : Object.keys(data).length
