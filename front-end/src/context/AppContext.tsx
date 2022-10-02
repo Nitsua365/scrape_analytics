@@ -1,30 +1,18 @@
 import React, { createContext, useContext, useState } from "react";
 
-import { io, Socket } from 'socket.io-client';
+import { io, Socket } from "socket.io-client";
 
 // App context type interface
 interface AppContextInterface {
-  socket: Socket<ServerToClientEvents, ClientToServerEvents>;
+  socket: Socket;
   numberOfPoints: number;
-}
-
-// Server to Client sending interface
-interface ServerToClientEvents {
-  noArg: () => void;
-  basicEmit: (a: number, b: string, c: Buffer) => void;
-  withAck: (d: string, callback: (e: number) => void) => void;
-}
-
-// Client to Server recieving interface
-interface ClientToServerEvents {
-  hello: () => void;
 }
 
 // initialize context
 const AppContext = createContext<AppContextInterface | Object>({});
 
 // initialize transport socket
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(process.env.REACT_APP_CONNECT_STRING, {
+const socket: Socket = io(process.env.REACT_APP_CONNECT_STRING, {
     transports: ['websocket', 'polling']
 });
 
