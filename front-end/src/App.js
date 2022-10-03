@@ -1,10 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 
 import './App.css';
 
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-
+// chart library
 import {
   LineChart,
   Line,
@@ -14,19 +12,38 @@ import {
   Legend
 } from 'recharts'
 
+// useSocket hook
 import useSocket from './utils/useSocket';
-import { AppBar, Grid, Toolbar, Box, Button } from '@mui/material';
+
+// mui material components
+import 
+{ 
+  AppBar, 
+  Grid, 
+  Toolbar, 
+  Box, 
+  Button, 
+  Stack,
+  Menu,
+  ToggleButtonGroup,
+  ToggleButton,
+  Typography,
+  TextField
+} from '@mui/material';
+
+// My battery status component
 import BatteryStatus from './BatteryStatus';
 
 function App() {
 
-  const sysData = useSocket({ key: 'Sys', trackHistory: true, points: 100 });
+  const [pollingAnchorEl, setPollingAnchorEl] = useState(null);
+  const [pointHistory, setPointHistory] = useState(20);
 
-  const [anchorEl, setAnchorEl] = useState(null);
+  const handlePollingMenuOpen = (event) => setPollingAnchorEl(event.currentTarget)
+  const handlePollingMenuClose = () => setPollingAnchorEl(null)
+  const handlePollingHistory = (e, newAlignment) => setPointHistory(newAlignment)
 
-  const handleMenu = (event) => setAnchorEl(event.currentTarget)
-
-  const handleClose = () => setAnchorEl(null)
+  const sysData = useSocket({ key: 'Sys', trackHistory: true, points: pointHistory });
 
   return (sysData.hasData &&
     <>
@@ -41,35 +58,57 @@ function App() {
               <Button 
                 sx={{ color: '#FFFFFF', borderColor: '#FFFFFF', '&:hover' : { borderColor: '#FFFFFF' }}}
                 variant="outlined"
-                aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
-                onClick={handleMenu}
+                onClick={handlePollingMenuOpen}
               >
                 Polling
               </Button>
               <Menu
                 id="menu-appbar"
-                anchorEl={anchorEl}
+                anchorEl={pollingAnchorEl}
                 anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: 'bottom',
+                  horizontal: '',
                 }}
                 keepMounted
                 transformOrigin={{
                   vertical: 'top',
-                  horizontal: 'right',
+                  horizontal: 'middle',
                 }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
+                open={Boolean(pollingAnchorEl)}
+                onClose={handlePollingMenuClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <Stack spacing={3} direction="column">
+                  <Stack spacing={2} direction="row" sx={{ paddingLeft: '5px', paddingRight: '5px'}}>
+                    <Typography variant='h5' color='info'>
+                      Points: 
+                    </Typography>
+                    <ToggleButtonGroup 
+                      color='info'
+                      value={pointHistory}
+                      exclusive
+                      onChange={handlePollingHistory}
+                      aria-label="Polling-History"
+                    >
+                      <ToggleButton value={20}>20</ToggleButton>
+                      <ToggleButton value={50}>50</ToggleButton>
+                      <ToggleButton value={100}>100</ToggleButton>
+                    </ToggleButtonGroup>
+                  </Stack>
+                  <Stack direction="row">
+                    <TextField id="polling-time-input" label="Polling Time (ms)" variant="outlined" />
+                    <Button size='large' variant='outlined' onClick={(e) => { /* handle click polling API call */ }}>
+                      Set
+                    </Button>
+                  </Stack>
+                </Stack>
               </Menu>
             </Box>
           </Toolbar>
         </AppBar>
       </Box>
+
       <Box>
         <Grid container rowSpacing={8} columnSpacing={4}>
           <Grid item xs={6}>
@@ -96,6 +135,7 @@ function App() {
                 )}
             </ LineChart>
           </Grid>
+
           <Grid item xs={6}>
             <LineChart
               width={700}
