@@ -5,7 +5,7 @@ import { useAppContext } from '../context/AppContext';
 const useSocket = ({ 
   key, 
   trackHistory=true, 
-  points=20 
+  points=25
 }) => {
 
   const { socket } = useAppContext();
