@@ -16,13 +16,13 @@ const useSocket = ({
   useEffect(() => {
     socket.on('connect', () => setIsConnected(true))
     socket.on('disconnect', () => setIsConnected(false));
-    socket.on(key, (data) => setData((curr) => {
-      if (trackHistory) {
-        if ([...curr, data].length > 100) curr.pop(0)
-        return [...curr, data]
-      }
-      else return data
-      
+    socket.on(key, (currData) => setData(
+      (curr) => {
+        if (trackHistory) {
+          if (curr.length >= 100) curr.shift();
+          return [...curr, currData]
+        }
+        else return currData
     }))
 
     return () => {

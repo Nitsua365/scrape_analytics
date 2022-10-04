@@ -27,8 +27,7 @@ import
   Menu,
   ToggleButtonGroup,
   ToggleButton,
-  Typography,
-  TextField
+  Typography
 } from '@mui/material';
 
 // My battery status component
@@ -96,13 +95,13 @@ function App() {
                       <ToggleButton value={100}>100</ToggleButton>
                     </ToggleButtonGroup>
                   </Stack>
-                  <Stack direction="row">
+                  {/* <Stack direction="row">
                     <TextField id="polling-time-input" label="Polling Time (ms)" variant="outlined" />
-                    <Button size='large' variant='outlined' onClick={(e) => { /* handle click polling API call */ }}>
+                    <Button size='large' variant='outlined' onClick={(e) => { }}>
                       Set
                     </Button>
-                  </Stack>
-                </Stack>
+                  </Stack> */}
+                </Stack> 
               </Menu>
             </Box>
           </Toolbar>
