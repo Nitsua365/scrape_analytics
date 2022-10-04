@@ -36,7 +36,7 @@ import BatteryStatus from './BatteryStatus';
 function App() {
 
   const [pollingAnchorEl, setPollingAnchorEl] = useState(null);
-  const [pointHistory, setPointHistory] = useState(20);
+  const [pointHistory, setPointHistory] = useState(25);
 
   const handlePollingMenuOpen = (event) => setPollingAnchorEl(event.currentTarget)
   const handlePollingMenuClose = () => setPollingAnchorEl(null)
@@ -90,8 +90,9 @@ function App() {
                       onChange={handlePollingHistory}
                       aria-label="Polling-History"
                     >
-                      <ToggleButton value={20}>20</ToggleButton>
+                      <ToggleButton value={25}>25</ToggleButton>
                       <ToggleButton value={50}>50</ToggleButton>
+                      <ToggleButton value={75}>75</ToggleButton>
                       <ToggleButton value={100}>100</ToggleButton>
                     </ToggleButtonGroup>
                   </Stack>
