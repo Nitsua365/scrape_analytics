@@ -18,7 +18,7 @@ const BATTERY_REGEX = /[0-9]+ %/g
 
 io.on('connection', (socket) => {
 
-    console.log('connected')
+    console.log(`[${Date.now()}] connected`)
 
     const sys_data = {
         time: "*",
@@ -70,7 +70,7 @@ io.on('connection', (socket) => {
     socket.on("disconnect", (reason) => {
         clearInterval(closeUPSPing)
         closePing()
-        console.log('disconnecting', reason);
+        console.log(`[${Date.now()}] disconnecting, ${reason}`);
     });
 });
 
