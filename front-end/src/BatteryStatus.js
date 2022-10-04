@@ -32,6 +32,10 @@ function BatteryStatus() {
             <Typography>
               Load(%): {data.mostRecentResult.load.percent} %
             </Typography>
+
+            <Typography>
+              Status: {data.mostRecentResult.state}
+            </Typography>
           {/* </div> */}
           </>
         ) : (
