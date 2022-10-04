@@ -1,77 +1,141 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import './App.css';
 
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
+// chart library
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
   Label,
   Legend
 } from 'recharts'
 
+// useSocket hook
 import useSocket from './utils/useSocket';
-import { AppBar, Grid, Toolbar, Box, IconButton, styled, Typography } from '@mui/material';
-import MenuIcon from '@mui/material/Menu'
+
+// mui material components
+import 
+{ 
+  AppBar, 
+  Grid, 
+  Toolbar, 
+  Box, 
+  Button, 
+  Stack,
+  Menu,
+  ToggleButtonGroup,
+  ToggleButton,
+  Typography
+} from '@mui/material';
+
+// My battery status component
 import BatteryStatus from './BatteryStatus';
 
 function App() {
 
-  const sysData = useSocket({ key: 'Sys', trackHistory : true, points: 100 });
+  const [pollingAnchorEl, setPollingAnchorEl] = useState(null);
+  const [pointHistory, setPointHistory] = useState(25);
+
+  const handlePollingMenuOpen = (event) => setPollingAnchorEl(event.currentTarget)
+  const handlePollingMenuClose = () => setPollingAnchorEl(null)
+  const handlePollingHistory = (e, newAlignment) => setPointHistory(newAlignment)
+
+  const sysData = useSocket({ key: 'Sys', trackHistory: true, points: pointHistory });
 
   return (sysData.hasData &&
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position='static' color='info' sx={{ marginBottom: '20px' }}>
-          <Toolbar>
-            <Box 
-              size="large"
-              edge="end"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
+      <Box sx={{ flexGrow: 1, marginBottom: '25px' }}>
+        <AppBar position="static">
+          <Toolbar sx={{ justifyContent: 'space-between' }}>
+            <Box>
               <BatteryStatus />
             </Box>
-            
-            {/* <IconButton
-              size="large"
-              aria-label="display more actions"
-              edge="end" 
-              color='inherit'
-            > */}
-              <MenuIcon />
-            {/* </IconButton> */}
+
+            <Box display='flex' justifyContent='end' alignItems='flex-end' >
+              <Button 
+                sx={{ color: '#FFFFFF', borderColor: '#FFFFFF', '&:hover' : { borderColor: '#FFFFFF' }}}
+                variant="outlined"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handlePollingMenuOpen}
+              >
+                Polling
+              </Button>
+              <Menu
+                id="menu-appbar"
+                anchorEl={pollingAnchorEl}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: '',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'middle',
+                }}
+                open={Boolean(pollingAnchorEl)}
+                onClose={handlePollingMenuClose}
+              >
+                <Stack spacing={3} direction="column">
+                  <Stack spacing={2} direction="row" sx={{ paddingLeft: '5px', paddingRight: '5px'}}>
+                    <Typography variant='h5' color='info'>
+                      Points: 
+                    </Typography>
+                    <ToggleButtonGroup 
+                      color='info'
+                      value={pointHistory}
+                      exclusive
+                      onChange={handlePollingHistory}
+                      aria-label="Polling-History"
+                    >
+                      <ToggleButton value={25}>25</ToggleButton>
+                      <ToggleButton value={50}>50</ToggleButton>
+                      <ToggleButton value={75}>75</ToggleButton>
+                      <ToggleButton value={100}>100</ToggleButton>
+                    </ToggleButtonGroup>
+                  </Stack>
+                  {/* <Stack direction="row">
+                    <TextField id="polling-time-input" label="Polling Time (ms)" variant="outlined" />
+                    <Button size='large' variant='outlined' onClick={(e) => { }}>
+                      Set
+                    </Button>
+                  </Stack> */}
+                </Stack> 
+              </Menu>
+            </Box>
           </Toolbar>
         </AppBar>
       </Box>
-      <div>
+
+      <Box>
         <Grid container rowSpacing={8} columnSpacing={4}>
           <Grid item xs={6}>
             <LineChart
-              width={700} 
-              height={300} 
+              width={700}
+              height={300}
               data={sysData.data}
             >
-              {(sysData.hasData) ? 
-              (
-                <>
-                  <XAxis dataKey='time'>
-                    <Label value="Time" position="bottom" offset={-10} />
-                  </XAxis>
-                  <YAxis dataKey="cpuCurrentSpeed.percent" label={{ value: 'CPU Percent %', angle: -90, position: 'centerLeft' }} />
-                  <Line type="monotone" dataKey="cpuCurrentSpeed.percent" stroke="#006eff" animationDuration={400} />
-                </>
-              ) : (
-                <>
-                  <div>
-                    Loading...
-                  </div>
-                </>
-              )}
+              {(sysData.hasData) ?
+                (
+                  <>
+                    <XAxis dataKey='time'>
+                      <Label value="Time" position="bottom" offset={-10} />
+                    </XAxis>
+                    <YAxis dataKey="cpuCurrentSpeed.percent" label={{ value: 'CPU Percent %', angle: -90, position: 'centerLeft' }} />
+                    <Line type="monotone" dataKey="cpuCurrentSpeed.percent" stroke="#006eff" animationDuration={400} />
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      Loading...
+                    </div>
+                  </>
+                )}
             </ LineChart>
           </Grid>
+
           <Grid item xs={6}>
             <LineChart
               width={700}
@@ -130,7 +194,7 @@ function App() {
             </LineChart>
           </Grid>
         </Grid>
-      </div>
+      </Box>
     </>
   );
 }
