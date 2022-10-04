@@ -30,31 +30,6 @@ io.on('connection', (socket) => {
         disksIO: '*'
     }
 
-    // let Time_data = { 
-    //     time: "*"
-    // }
-
-    // let CPU_data = {
-    //     cpuCurrentSpeed: "*",
-    //     cpuTemperature: 'main, cores, max'
-    // }
-
-    // let RAM_data = {
-    //     mem: 'total, free, used, active, available, swaptotal, swapused, swapfree'
-    // }
-
-    // let Network_data = {
-    //     networkStats: "*"
-    // }
-
-    // let Process_data = {
-    //     processLoad: '(scrapy) *'
-    // }
-
-    // let Storage_data = {
-    //     disksIO: '*'
-    // }
-
     const UPS_Analytics = () => {
         sudo.exec(['sudo', 'pwrstat', '-status'], (err, pid, output) => {
             if (err) console.error('UPS pwrstat error:', err, 'pid:', pid)
@@ -86,30 +61,11 @@ io.on('connection', (socket) => {
             data.mem = convertToMB({ ...data.mem })
             socket.emit("Sys", data)
         })
-
-        // CPU analytics
-        // sysInfo.get(CPU_data, (data) => socket.emit("CPU", { ...data, percent, time: Date.now() }));
-
-        // // Time analytics
-        // sysInfo.get(Time_data, (data) => socket.emit("Time", data));
-
-        // // Memory/RAM analytics
-        // sysInfo.get(RAM_data, (data) => socket.emit("Mem", data));
-
-        // // Network analytics
-        // sysInfo.get(Network_data, (data) => socket.emit("Net", data));
-
-        // // Process usage anlytics
-        // sysInfo.get(Process_data, (data) => socket.emit("Proc", data));
-
-        // // Disk usage analytics
-        // sysInfo.get(Storage_data, (data) => socket.emit("Storage", data));
-
     }, 3000);
 
 
     // UPS battery analytics
-    let closeUPSPing = setInterval(UPS_Analytics, 10000)
+    let closeUPSPing = setInterval(UPS_Analytics, 5000)
 
     socket.on("disconnect", (reason) => {
         clearInterval(closeUPSPing)
